@@ -5,13 +5,13 @@
       <div class="col-span-6">
         <span class="text-gray-600">選擇目的地</span>
         <ul class="flex flex-wrap">
-          <li class="flex align-center mb-1">
-            <span>1234</span>
-            <button type="button" class="ml-1">
-              <span class="material-icons-outlined mt-0.5">
+          <li class="flex flex-row-reverse align-center mb-1">
+            <button type="button" class="select-delBtn ml-1 hover:opacity-75">
+              <span class="material-icons-outlined mt-0.5 text-gray-800">
                 close
               </span>
             </button>
+            <span>1234</span>
           </li>
         </ul>
       </div>
@@ -26,7 +26,9 @@
 
     <ul class="px-3 mb-3 grid grid-cols-3 gap-x-6 gap-y-3">
       <li>
-        <button type="button" class="border border-primary rounded-lg py-1.5 w-full">
+        <button type="button"
+          class="border border-primary rounded-lg py-1.5 w-full
+          hover:bg-primary hover:text-white">
           高雄
         </button>
       </li>
@@ -144,7 +146,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .searchInput {
   background-image: url('/public/images/Search.svg');
   background-repeat: no-repeat;
@@ -152,5 +154,8 @@ export default {
 }
 .select-btn.active img{
   transform: rotate(180deg);
+}
+.select-delBtn:hover + span {
+  opacity: .75;
 }
 </style>

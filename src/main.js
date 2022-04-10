@@ -1,4 +1,3 @@
-import '@/assets/stylesheet/fonts/twicons/twicon.css';
 import '@/assets/stylesheet/all.scss';
 
 import { createApp } from 'vue';

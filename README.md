@@ -1,24 +1,6 @@
-# travel_taiwan
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# The F2E 前端 & UI 修煉精神時光屋 第一關
+## 使用技術
+- Vue 3
+- Vue Router
+- Vue CLI
+- Tailwind CSS

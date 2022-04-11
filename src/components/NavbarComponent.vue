@@ -1,38 +1,63 @@
 <template>
-  <div class="py-2 px-4 lg:px-6 text-lg overflow-auto grow">
+  <div class="py-2 sm:py-4 px-4 sm:px-6 lg:px-0 text-lg overflow-auto grow">
     <div class="bg-gray-300 pt-2.5 px-3 border border-gray-500 rounded-lg mb-3
-      grid grid-cols-7">
-      <div class="col-span-6">
+      flex justify-between">
+      <div>
         <span class="text-gray-600">選擇目的地</span>
-        <ul class="flex flex-wrap">
-          <li class="flex flex-row-reverse align-center mb-1">
-            <button type="button" class="select-delBtn ml-1 hover:opacity-75">
-              <span class="material-icons-outlined mt-0.5 text-gray-800">
-                close
-              </span>
-            </button>
-            <span>1234</span>
-          </li>
-        </ul>
+        <div class="flex flex-row-reverse justify-end align-center mb-1">
+          <button type="button" class="select-delBtn ml-1 hover:opacity-75">
+            <span class="material-icons-outlined mt-0.5 text-gray-800">
+              close
+            </span>
+          </button>
+          <span>1234</span>
+        </div>
       </div>
-      <div class="text-right">
-        <button type="button" @click="showSelectMenu = !showSelectMenu"
-          class="select-btn w-full" :class="{ active: showSelectMenu }">
+      <div>
+        <button type="button"
+          class="select-btn w-full hover:opacity-50"
+          :class="{ active: showSelectMenu }"
+          @click="showSelectMenu = !showSelectMenu">
           <img src="../../public/images/arrow_down_circle.svg" alt="icon"
-            class="transition-transform ml-auto" />
+            class="transition-transform duration-300 ml-auto" />
         </button>
       </div>
     </div>
 
-    <ul class="px-3 mb-3 grid grid-cols-3 gap-x-6 gap-y-3">
-      <li>
-        <button type="button"
-          class="border border-primary rounded-lg py-1.5 w-full
-          hover:bg-primary hover:text-white">
-          高雄
-        </button>
-      </li>
-    </ul>
+    <section class="mb-3 overflow-hidden transition-all duration-300"
+      :class="showSelectMenu ? 'h-47' : 'h-0'">
+      <ul class="flex justify-around mb-3 text-base text-center whitespace-nowrap overflow-x-auto">
+        <li>
+          <button type="button"
+            class="px-2 border-b-2 hover:border-primary"
+            :class="region === 'north' ? 'border-primary' : 'border-transparent'"
+            @click="region = 'north'"
+          >北部</button>
+        </li>
+        <li>
+          <button type="button"
+            class="px-2 border-b-2 border-transparent hover:border-primary"
+            :class="region === 'center' ? 'border-primary' : 'border-transparent'"
+            @click="region = 'center'"
+          >中部</button>
+        </li>
+        <li>
+          <button type="button"
+            class="px-2 border-b-2 border-transparent hover:border-primary"
+            :class="region === 'south' ? 'border-primary' : 'border-transparent'"
+            @click="region = 'south'"
+          >南部</button>
+        </li>
+        <li>
+          <button type="button"
+            class="px-2 border-b-2 border-transparent hover:border-primary"
+            :class="region === 'others' ? 'border-primary' : 'border-transparent'"
+            @click="region = 'others'"
+          >東部、離島</button>
+        </li>
+      </ul>
+      <CitiesSelector :region="region" />
+    </section>
 
     <label for="search">
       <input id="search" type="text" placeholder="搜尋關鍵字"
@@ -42,7 +67,7 @@
 
     <section>
       <h3 class="text-lg font-semibold mb-6">精選主題</h3>
-      <ul class="grid grid-cols-2 gap-x-4 gap-y-3">
+      <ul class="text-base grid grid-cols-2 gap-x-4 gap-y-3">
         <li>
           <a href="#"
             class="flex flex-col justify-center items-center py-2
@@ -137,16 +162,22 @@
 </template>
 
 <script>
+import CitiesSelector from '@/components/CitiesSelector.vue';
+
 export default {
   data() {
     return {
       showSelectMenu: false,
+      region: 'north',
     };
+  },
+  components: {
+    CitiesSelector,
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .searchInput {
   background-image: url('/public/images/Search.svg');
   background-repeat: no-repeat;

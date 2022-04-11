@@ -8,7 +8,7 @@ module.exports = {
       transparent: 'transparent',
       primary: '#3FB195',
       'primary-op-20': 'rgba(63, 177, 149, 0.2)',
-      'primary-400': '#D9EFEA',
+      'primary-op-8': 'rgba(63, 177, 149, 0.08)',
       dark: '#222222',
       white: '#ffffff',
       'gray-300': '#FAFAFA',
@@ -45,17 +45,22 @@ module.exports = {
     extend: {
       boxShadow: {
         default: '0px 14px 24px rgba(0, 0, 0, 0.04)',
-        mini: '0px 1px 0px rgba(0, 0, 0, 0.08)',
       },
       spacing: {
         '17.5': '4.375rem',
         '38': '9.5rem',
+        '41': '10.25rem',
+        '47': '11.75rem',
         '59': '14.75rem',
+        '70': '17.5rem',
         '84': '21rem',
         '88.5': '22.125rem',
+        '91': '22.75rem',
       },
-      aspectRatio: {
-        '4x3': '4 / 3',
+      minHeight: {
+        'footer-bottom': 'calc(100vh - 57px - 128px)',
+        'footer-bottom-sm': 'calc(100vh - 57px - 64px)',
+        'footer-bottom-lg': 'calc(100vh - 64px)',
       },
     },
   },

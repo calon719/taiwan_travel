@@ -1,0 +1,5 @@
+.card {
+  &:hover .card-top-img {
+    transform: scale(1.5);
+  }
+}

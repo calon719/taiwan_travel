@@ -6,6 +6,16 @@ const routes = [
     name: 'home',
     component: () => import('../views/HomeView.vue'),
   },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('../views/SearchView.vue'),
+  },
+  {
+    path: '/tourism',
+    name: 'tourism',
+    component: () => import('../views/TourismView.vue'),
+  },
 ];
 
 const router = createRouter({

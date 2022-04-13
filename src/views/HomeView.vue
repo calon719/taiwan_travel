@@ -8,19 +8,54 @@
     </h2>
   </div>
 
-  <ThemesComponent theme="熱門景點"
+  <ThemesComponent theme="熱門景點" :tourismData="scenicspotData"
     class="mb-10" />
-  <ThemesComponent theme="觀光活動"
+  <ThemesComponent theme="觀光活動" :tourismData="hotelData"
     class="mb-10" />
-  <ThemesComponent theme="美食品嚐"
+  <ThemesComponent theme="美食品嚐" :tourismData="restaurantData"
     class="mb-10" />
-  <ThemesComponent theme="住宿推薦" />
+  <ThemesComponent theme="住宿推薦" :tourismData="activityData" />
 </template>
 
 <script>
 import ThemesComponent from '@/components/ThemesComponent.vue';
 
 export default {
+  data() {
+    return {
+      scenicspotData: [],
+      hotelData: [],
+      restaurantData: [],
+      activityData: [],
+      apiPath: [
+        'ScenicSpot',
+        'Hotel',
+        'Restaurant',
+        'Activity',
+      ],
+    };
+  },
+  inject: ['headerOptions'],
+  methods: {
+    getData() {
+      this.apiPath.forEach(this.catchErr(this.asyncFn));
+    },
+    async asyncFn(path) {
+      const res = await this.$http.get(
+        `${process.env.VUE_APP_APIBASE}/${path}?$top=3&$format=JSON`,
+        { header: this.headerOptions },
+      );
+      this[`${path.toLowerCase(path)}Data`] = res.data;
+    },
+    catchErr(asyncFn) {
+      return (path) => asyncFn(path).catch((err) => {
+        console.dir(err);
+      });
+    },
+  },
+  created() {
+    this.getData();
+  },
   components: {
     ThemesComponent,
   },

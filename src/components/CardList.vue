@@ -1,14 +1,15 @@
 <template>
   <ul
     class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-x-4 md:gap-x-6 mb-10">
-    <li class="card shadow-default rounded-2xl relative h-100">
-      <routerLink to="/tourism" class="block absolute inset-0 z-10" />
+    <li class="card shadow-default hover:shadow-lg rounded-2xl relative h-100"
+      v-for="item in cardData" :key="item">
+      <RouterLink to="/tourism" class="block absolute inset-0 z-10" />
       <button type="button"
         class="absolute top-3 right-3 p-3 bg-primary-op-20 rounded-2xl hover:bg-primary z-20">
         <img src="../../public/images/Vector-white.svg" alt="icon" />
       </button>
       <div class="h-41 flex items-center justify-center overflow-hidden rounded-t-2xl">
-        <img src="https://fakeimg.pl/500x300/" alt=""
+        <img :src="'/public/images/image_default.jpg'" alt=""
           class="card-top-img object-cover transtion-transform duration-300" />
       </div>
       <div class="bg-white py-2 px-4 sm:p-3 rounded-b-2xl text-sm text-gray-800">
@@ -29,3 +30,19 @@
     </li>
   </ul>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      defaultImg: '../../public/images/image_default.jpg',
+    };
+  },
+  props: {
+    cardData: {
+      type: Array,
+      required: true,
+    },
+  },
+};
+</script>

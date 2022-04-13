@@ -57,6 +57,17 @@
     </p>
   </section>
 
+  <section class="mb-6">
+    <h4 class="text-primary text-lg font-bold mb-4">注意事項</h4>
+    <p>
+      Corporis saepe.Elit veniam ea eaque ex perspiciatis Dignissimos beatae accusamus
+      id autem incidunt.
+      Velit eius veritatis qui odit eum eligendi eius Veniam cupiditate
+      iure suscipit animi quia dolor temporibus.
+      Corporis saepe.
+    </p>
+  </section>
+
   <section class="mb-12">
     <h4 class="text-primary text-lg font-bold mb-4">交通方式</h4>
     <div class="bg-white h-70 w-full mb-4 rounded-lg">map</div>

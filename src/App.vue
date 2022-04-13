@@ -6,10 +6,10 @@
         @click="showTopMenu = !showTopMenu">
         <img src="../public/images/carbon_settings-adjust.svg" alt="選單圖示">
       </button>
-      <routerLink to="/"
+      <RouterLink to="/"
         class="logo-link absolute h-10 top-2 right-1/2 translate-x-1/2">
         <h1>TAIWAN TRAVEL</h1>
-      </routerLink>
+      </RouterLink>
 
       <div
         class="topMenu fixed bottom-0 inset-x-0 flex flex-col overflow-hidden bg-white
@@ -29,9 +29,9 @@
   <div class="grid grid-cols-10">
     <nav class="hidden lg:block sticky top-0 left-0 h-screen bg-white py-10
       shadow-default overflow-y-auto lg:col-span-3 2xl:col-span-2 px-6">
-      <routerLink to="/" class="logo-link block h-12 mb-6">
+      <RouterLink to="/" class="logo-link block h-12 mb-6">
         <h1>TAIWAN TRAVEL</h1>
-      </routerLink>
+      </RouterLink>
       <NavbarComponent class="w-full" />
       <button type="button"
         class="bg-primary text-center text-white text-lg
@@ -43,16 +43,16 @@
       <main
         class="bg-gray-300 px-4 md:px-6 pt-6 md:pt-10 pb-20
         min-h-footer-bottom sm:min-h-footer-bottom-sm  lg:min-h-footer-bottom-lg">
-        <routerView />
+        <RouterView />
       </main>
 
       <footer class="bg-primary text-white text-center py-2">
         <div class="container w-full mx-auto grid grid-cols-1 sm:grid-cols-3">
-          <routerLink to="/"
+          <RouterLink to="/"
             class="flex items-center font-semibold h-full px-4 py-2
             text-right sm:text-center">
             <h2>TAIWAN TRAVEL</h2>
-          </routerLink>
+          </RouterLink>
           <div class="text-left">
             <p>
               UI 設計師：
@@ -76,15 +76,19 @@
       </footer>
     </div>
   </div>
+  <LoadingAnimation :loadingStatus="loadingStatus" />
 </template>
 
 <script>
+import getAuthorizationHeader from '@/utils/getAuthorizationHeader';
 import NavbarComponent from '@/components/NavbarComponent.vue';
+import LoadingAnimation from '@/components/LoadingAnimation.vue';
 
 export default {
   data() {
     return {
       showTopMenu: false,
+      loadingStatus: false,
     };
   },
   watch: {
@@ -92,8 +96,12 @@ export default {
       this.showTopMenu = false;
     },
   },
+  provide: {
+    headerOptions: getAuthorizationHeader(),
+  },
   components: {
     NavbarComponent,
+    LoadingAnimation,
   },
 };
 </script>

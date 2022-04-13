@@ -10,11 +10,11 @@
 
   <ThemesComponent theme="熱門景點" :tourismData="scenicspotData"
     class="mb-10" />
-  <ThemesComponent theme="觀光活動" :tourismData="hotelData"
+  <ThemesComponent theme="觀光活動" :tourismData="activityData"
     class="mb-10" />
   <ThemesComponent theme="美食品嚐" :tourismData="restaurantData"
     class="mb-10" />
-  <ThemesComponent theme="住宿推薦" :tourismData="activityData" />
+  <ThemesComponent theme="住宿推薦" :tourismData="hotelData" />
 </template>
 
 <script>
@@ -58,6 +58,15 @@ export default {
   },
   components: {
     ThemesComponent,
+  },
+  unmounted() {
+    const tourismData = [
+      ...this.scenicspotData,
+      ...this.hotelData,
+      ...this.restaurantData,
+      ...this.activityData,
+    ];
+    localStorage.setItem('tourismData', JSON.stringify(tourismData));
   },
 };
 </script>

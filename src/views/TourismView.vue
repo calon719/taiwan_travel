@@ -83,7 +83,7 @@
 
   <section>
     <h4 class="text-primary text-lg font-bold mb-4">更多相關景點</h4>
-    <CardList />
+    <CardList :cardData="recommendableTourism" />
   </section>
 </template>
 
@@ -91,6 +91,37 @@
 import CardList from '@/components/CardList.vue';
 
 export default {
+  data() {
+    return {
+      otherTourismData: JSON.parse(localStorage.getItem('tourismData')),
+    };
+  },
+  inject: ['filterData'],
+  computed: {
+    recommendableTourism() {
+      const { id } = this.$route.params;
+      const index = this.otherTourismData.findIndex((tourism) => this.filterData(tourism, 'ID') === id);
+      const tourismData = this.otherTourismData.filter((item, i) => i !== index);
+
+      const len = tourismData.length;
+      const tourismNum = len >= 3 ? 3 : len;
+      const randomNumArr = [];
+
+      for (let i = 0; i < tourismNum; i += 1) {
+        const randomNum = Math.floor(Math.random() * len);
+        const check = randomNumArr.some((num) => randomNum === num);
+        if (check) {
+          i -= 1;
+        } else {
+          randomNumArr.push(randomNum);
+        }
+      }
+
+      const resultArr = randomNumArr.map((i) => tourismData[i]);
+      console.log(resultArr);
+      return resultArr;
+    },
+  },
   methods: {
     goPrePage() {
       this.$router.go(-1);

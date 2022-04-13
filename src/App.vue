@@ -80,9 +80,10 @@
 </template>
 
 <script>
-import getAuthorizationHeader from '@/utils/getAuthorizationHeader';
 import NavbarComponent from '@/components/NavbarComponent.vue';
 import LoadingAnimation from '@/components/LoadingAnimation.vue';
+import getAuthorizationHeader from '@/utils/getAuthorizationHeader';
+import filterData from '@/utils/filterData';
 
 export default {
   data() {
@@ -98,6 +99,7 @@ export default {
   },
   provide: {
     headerOptions: getAuthorizationHeader(),
+    filterData,
   },
   components: {
     NavbarComponent,

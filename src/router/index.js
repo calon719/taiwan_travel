@@ -12,7 +12,7 @@ const routes = [
     component: () => import('../views/SearchView.vue'),
   },
   {
-    path: '/tourism',
+    path: '/tourism/:id',
     name: 'tourism',
     component: () => import('../views/TourismView.vue'),
   },

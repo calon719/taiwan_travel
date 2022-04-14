@@ -10,6 +10,7 @@ module.exports = {
       'primary-op-20': 'rgba(63, 177, 149, 0.2)',
       'primary-op-8': 'rgba(63, 177, 149, 0.08)',
       dark: '#222222',
+      'dark-op-30': 'rgba(0, 0, 0, 0.3)',
       white: '#ffffff',
       'gray-300': '#FAFAFA',
       'gray-500': '#EAEBEA',
@@ -23,6 +24,9 @@ module.exports = {
       'icon-orange': '#FD975E',
       'icon-amber': '#C17B53',
       'icon-green': '#8FCA6B',
+      'fb': '#3B5998',
+      'twitter': '#00ACEE',
+      'line': '#00B900',
     },
     fontSize: {
       sm: '.875rem',

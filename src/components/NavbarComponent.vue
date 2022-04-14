@@ -6,9 +6,7 @@
         <span class="text-gray-600">選擇目的地</span>
         <div class="flex flex-row-reverse justify-end align-center mb-1">
           <button type="button" class="select-delBtn ml-1 hover:opacity-75">
-            <span class="material-icons-outlined mt-0.5 text-gray-800">
-              close
-            </span>
+            <i class="bi bi-x-lg"></i>
           </button>
           <span>1234</span>
         </div>

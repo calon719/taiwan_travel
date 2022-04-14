@@ -1,0 +1,11 @@
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+  }
+  .print-noBreak {
+    break-inside: avoid;
+  }
+  .print-noPrint {
+    display: none;
+  }
+}

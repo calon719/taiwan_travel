@@ -9,7 +9,7 @@ function getAuthorizationHeader() {
 
   const HMAC = ShaObj.getHMAC('B64');
   const Authorization = `hmac username="${process.env.VUE_APP_PTX_ID}", algorithm="hmac-sha1", headers="x-date", signature="${HMAC}"`;
-  return { Authorization, 'X-Date': GMTString };
+  return { Authorization, 'x-date': GMTString };
 }
 
 export default getAuthorizationHeader;

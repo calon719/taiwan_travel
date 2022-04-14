@@ -41,7 +41,7 @@
     </ul>
   </div>
 
-  <CardList />
+  <CardList :cardData="tourismData" />
 
   <div class="flex justify-center">
     <PaginationComponent />
@@ -53,9 +53,18 @@ import PaginationComponent from '@/components/PaginationComponent.vue';
 import CardList from '@/components/CardList.vue';
 
 export default {
+  data() {
+    return {
+      tourismData: [],
+    };
+  },
   components: {
     PaginationComponent,
     CardList,
+  },
+  emits: ['emit-loading-status'],
+  created() {
+    this.$emit('emit-loading-status', true);
   },
 };
 </script>

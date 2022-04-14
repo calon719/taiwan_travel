@@ -5,9 +5,7 @@
         class="h-11 w-11 rounded-lg border border-primary
         bg-white hover:bg-primary text-primary hover:text-white
         flex justify-center items-center">
-        <span class="material-icons-outlined">
-          chevron_left
-        </span>
+        <i class="bi bi-chevron-left"></i>
       </button>
     </li>
     <li>
@@ -23,9 +21,7 @@
         class="h-11 w-11 rounded-lg border border-primary
         bg-white hover:bg-primary text-primary hover:text-white
         flex justify-center items-center">
-        <span class="material-icons-outlined">
-          chevron_right
-        </span>
+        <i class="bi bi-chevron-right"></i>
       </button>
     </li>
   </ul>

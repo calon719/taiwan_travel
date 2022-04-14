@@ -4,9 +4,13 @@
     <li class="card shadow-default hover:shadow-lg rounded-2xl relative h-100
       transition-all duration-300"
       v-for="item in cardData" :key="filterData(item, 'ID')">
-      <RouterLink :to="`/tourism/${filterData(item, 'ID')}`" class="block absolute inset-0 z-10" />
+      <RouterLink
+        :to="{ path: '/tourism', query: { id: filterData(item, 'ID'),
+        category: getCategoryString(item) } }"
+        class="block absolute inset-0 z-10" />
       <button type="button"
-        class="absolute top-3 right-3 p-3 bg-primary-op-20 rounded-2xl hover:bg-primary z-20">
+        class="absolute top-3 right-3 p-3 bg-primary-op-20 rounded-2xl hover:bg-primary z-20"
+        @click="showShareLinkModal(item)">
         <img src="../../public/images/Vector-white.svg" alt="icon" />
       </button>
       <div class="h-41 flex items-center justify-center overflow-hidden rounded-t-2xl">
@@ -20,9 +24,16 @@
           <p class="ml-2">{{ item.Address }}</p>
         </div>
         <div class="flex items-center mb-2"
-          v-if="item.OpenTime">
+          v-if="item.OpenTime || item.StartTime">
           <img src="../../public/images/Time_Circle.svg" alt="icon" />
-          <p class="ml-2">{{ item.OpenTime }}</p>
+          <p class="ml-2">
+            <template v-if="item.OpenTime">
+              {{ item.OpenTime }}
+            </template>
+            <template v-else>
+              {{ formatTime(item.StartTime) }} 至 {{ formatTime(item.EndTime) }}
+            </template>
+          </p>
         </div>
         <div class="flex items-center mb-2">
           <img src="../../public/images/Calling.svg" alt="icon" />
@@ -31,13 +42,20 @@
       </div>
     </li>
   </ul>
+  <ShareLinkModal :class="{ hidden: !openShareLinkModal }"
+    :tourismName="tourismName"
+    :shareUrl="shareUrl"
+    @hideShareLinkModal="toggleShareLinkModal"/>
 </template>
 
 <script>
+import ShareLinkModal from '@/components/ShareLinkModal.vue';
+import shareLinkModalMixin from '@/mixins/shareLinkModalMixin';
+
 export default {
   data() {
     return {
-      defaultImg: 'https://raw.githubusercontent.com/calon719/2021_the_f2e_taiwan_travel/master/public/images/image_default.jpg',
+      tourismName: '',
     };
   },
   props: {
@@ -46,6 +64,31 @@ export default {
       required: true,
     },
   },
-  inject: ['filterData'],
+  inject: [
+    'filterData',
+    'formatTime',
+    'defaultImg',
+  ],
+  mixins: [shareLinkModalMixin],
+  methods: {
+    getCategoryString(tourismData) {
+      const keys = Object.keys(tourismData);
+      const filteredKey = keys.find((key) => key.includes('ID'));
+      const strArr = filteredKey.split('');
+      strArr.splice(-2);
+      const str = strArr.join('');
+      return str;
+    },
+    showShareLinkModal(tourism) {
+      const category = this.getCategoryString(tourism);
+      const id = this.filterData(tourism, 'ID');
+      this.shareUrl = `${process.env.VUE_APP_URL}/tourism?id=${id}&category=${category}`;
+      this.tourismName = this.filterData(tourism, 'Name');
+      this.openShareLinkModal = true;
+    },
+  },
+  components: {
+    ShareLinkModal,
+  },
 };
 </script>

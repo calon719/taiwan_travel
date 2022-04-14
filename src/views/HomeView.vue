@@ -35,21 +35,38 @@ export default {
       ],
     };
   },
-  inject: ['headerOptions'],
+  emits: ['emit-loading-status'],
+  inject: [
+    'headerOptions',
+    'showErrMessage',
+  ],
   methods: {
     getData() {
+      this.$emit('emit-loading-status', true);
       this.apiPath.forEach(this.catchErr(this.asyncFn));
     },
     async asyncFn(path) {
       const res = await this.$http.get(
         `${process.env.VUE_APP_APIBASE}/${path}?$top=3&$format=JSON`,
-        { header: this.headerOptions },
+        { headers: this.headerOptions },
       );
       this[`${path.toLowerCase(path)}Data`] = res.data;
     },
     catchErr(asyncFn) {
-      return (path) => asyncFn(path).catch((err) => {
-        console.dir(err);
+      return (path) => asyncFn(path).catch(() => {
+        this.showErrMessage();
+        this.$emit('emit-loading-status', false);
+      }).then(() => {
+        const dataCheck = [];
+
+        this.apiPath.forEach((item) => {
+          const status = this[`${item.toLowerCase(path)}Data`].length > 0;
+          dataCheck.push(status);
+        });
+
+        if (dataCheck.every((data) => data)) {
+          this.$emit('emit-loading-status', false);
+        }
       });
     },
   },
@@ -58,15 +75,6 @@ export default {
   },
   components: {
     ThemesComponent,
-  },
-  unmounted() {
-    const tourismData = [
-      ...this.scenicspotData,
-      ...this.hotelData,
-      ...this.restaurantData,
-      ...this.activityData,
-    ];
-    localStorage.setItem('tourismData', JSON.stringify(tourismData));
   },
 };
 </script>

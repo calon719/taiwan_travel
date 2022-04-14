@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 inset-x-0 z-50 bg-white lg:hidden">
+  <header class="print-noPrint sticky top-0 inset-x-0 z-50 bg-white lg:hidden">
     <nav class="py-2 px-4 border-b border-gray-500">
       <button type="button"
         class="bg-primary-op-20 p-2 rounded-lg hover:opacity-75"
@@ -27,7 +27,7 @@
   </header>
 
   <div class="grid grid-cols-10">
-    <nav class="hidden lg:block sticky top-0 left-0 h-screen bg-white py-10
+    <nav class="print-noPrint hidden lg:block sticky top-0 left-0 h-screen bg-white py-10
       shadow-default overflow-y-auto lg:col-span-3 2xl:col-span-2 px-6">
       <RouterLink to="/" class="logo-link block h-12 mb-6">
         <h1>TAIWAN TRAVEL</h1>
@@ -43,10 +43,10 @@
       <main
         class="bg-gray-300 px-4 md:px-6 pt-6 md:pt-10 pb-20
         min-h-footer-bottom sm:min-h-footer-bottom-sm  lg:min-h-footer-bottom-lg">
-        <RouterView />
+        <RouterView @emitLoadingStatus="toggleLoadingStatus" />
       </main>
 
-      <footer class="bg-primary text-white text-center py-2">
+      <footer class="print-noPrint bg-primary text-white text-center py-2">
         <div class="container w-full mx-auto grid grid-cols-1 sm:grid-cols-3">
           <RouterLink to="/"
             class="flex items-center font-semibold h-full px-4 py-2
@@ -84,6 +84,8 @@ import NavbarComponent from '@/components/NavbarComponent.vue';
 import LoadingAnimation from '@/components/LoadingAnimation.vue';
 import getAuthorizationHeader from '@/utils/getAuthorizationHeader';
 import filterData from '@/utils/filterData';
+import showErrMessage from '@/utils/showErrMessage';
+import formatTime from '@/utils/formatTime';
 
 export default {
   data() {
@@ -100,10 +102,18 @@ export default {
   provide: {
     headerOptions: getAuthorizationHeader(),
     filterData,
+    showErrMessage,
+    formatTime,
+    defaultImg: 'https://raw.githubusercontent.com/calon719/2021_the_f2e_taiwan_travel/master/public/images/image_default.jpg',
   },
   components: {
     NavbarComponent,
     LoadingAnimation,
+  },
+  methods: {
+    toggleLoadingStatus(status) {
+      this.loadingStatus = status;
+    },
   },
 };
 </script>

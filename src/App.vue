@@ -15,12 +15,14 @@
         class="topMenu fixed bottom-0 inset-x-0 flex flex-col overflow-hidden bg-white
         z-40 transition-all duration-300"
         :class="showTopMenu ? 'show' : 'h-0'">
-        <NavbarComponent />
+        <NavbarComponent @emitSearchQueries="getSearchQueries" />
         <div class="py-2 px-4">
           <button type="button"
-            class="bg-primary text-lg text-center text-white
+            class="search-btn bg-primary text-lg text-center text-white
             w-full py-2.5 rounded-lg hover:opacity-75"
-          >開始搜尋</button>
+            @click="goSearchPage"
+            :disabled="searchQueries.theme === '' || !searchQueries.theme">
+            開始搜尋</button>
         </div>
       </div>
     </nav>
@@ -32,11 +34,13 @@
       <RouterLink to="/" class="logo-link block h-12 mb-6">
         <h1>TAIWAN TRAVEL</h1>
       </RouterLink>
-      <NavbarComponent class="w-full" />
+      <NavbarComponent class="w-full" @emitSearchQueries="getSearchQueries" />
       <button type="button"
-        class="bg-primary text-center text-white text-lg
+        class="search-btn bg-primary text-center text-white text-lg
         w-full py-2.5 rounded-lg hover:opacity-75"
-      >開始搜尋</button>
+        @click="goSearchPage"
+        :disabled="searchQueries.theme === '' || !searchQueries.theme">
+        開始搜尋</button>
     </nav>
 
     <div class="col-span-10 lg:col-span-7 2xl:col-span-8">
@@ -85,13 +89,13 @@ import LoadingAnimation from '@/components/LoadingAnimation.vue';
 import getAuthorizationHeader from '@/utils/getAuthorizationHeader';
 import filterData from '@/utils/filterData';
 import showErrMessage from '@/utils/showErrMessage';
-import formatTime from '@/utils/formatTime';
 
 export default {
   data() {
     return {
       showTopMenu: false,
       loadingStatus: false,
+      searchQueries: {},
     };
   },
   watch: {
@@ -100,11 +104,9 @@ export default {
     },
   },
   provide: {
-    headerOptions: getAuthorizationHeader(),
+    getAuthorizationHeader,
     filterData,
     showErrMessage,
-    formatTime,
-    defaultImg: 'https://raw.githubusercontent.com/calon719/2021_the_f2e_taiwan_travel/master/public/images/image_default.jpg',
   },
   components: {
     NavbarComponent,
@@ -113,6 +115,15 @@ export default {
   methods: {
     toggleLoadingStatus(status) {
       this.loadingStatus = status;
+    },
+    goSearchPage() {
+      this.$router.push({
+        path: '/search',
+        query: this.searchQueries,
+      });
+    },
+    getSearchQueries(searchQueries) {
+      this.searchQueries = searchQueries;
     },
   },
 };
@@ -132,5 +143,8 @@ export default {
   &.show {
     height: calc(100vh - 56px);
   }
+}
+.search-btn:disabled {
+  opacity: .75;
 }
 </style>

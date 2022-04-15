@@ -8,36 +8,33 @@
     </h2>
   </div>
 
-  <ThemesComponent theme="熱門景點" :tourismData="scenicspotData"
-    class="mb-10" />
-  <ThemesComponent theme="觀光活動" :tourismData="activityData"
-    class="mb-10" />
-  <ThemesComponent theme="美食品嚐" :tourismData="restaurantData"
-    class="mb-10" />
-  <ThemesComponent theme="住宿推薦" :tourismData="hotelData" />
+  <ThemesComponent
+    v-for="(categoryName, key) in tourismCategories"
+    :key="`home${categoryName}`"
+    :theme="categoryName"
+    :category="key"
+    :tourismData="this[`${key.toLowerCase()}Data`]"
+    :class="{ 'mb-10': key !== apiPath[apiPath.length - 1] }" />
 </template>
 
 <script>
 import ThemesComponent from '@/components/ThemesComponent.vue';
+import tourismCategories from '@/data/tourismCategories';
 
 export default {
   data() {
     return {
+      tourismCategories,
       scenicspotData: [],
       hotelData: [],
       restaurantData: [],
       activityData: [],
-      apiPath: [
-        'ScenicSpot',
-        'Hotel',
-        'Restaurant',
-        'Activity',
-      ],
+      apiPath: [...Object.keys(tourismCategories)],
     };
   },
   emits: ['emit-loading-status'],
   inject: [
-    'headerOptions',
+    'getAuthorizationHeader',
     'showErrMessage',
   ],
   methods: {
@@ -48,7 +45,7 @@ export default {
     async asyncFn(path) {
       const res = await this.$http.get(
         `${process.env.VUE_APP_APIBASE}/${path}?$top=3&$format=JSON`,
-        { headers: this.headerOptions },
+        { headers: this.getAuthorizationHeader() },
       );
       this[`${path.toLowerCase(path)}Data`] = res.data;
     },

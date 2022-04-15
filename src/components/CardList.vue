@@ -5,8 +5,10 @@
       transition-all duration-300"
       v-for="item in cardData" :key="filterData(item, 'ID')">
       <RouterLink
-        :to="{ path: '/tourism', query: { id: filterData(item, 'ID'),
-        category: getCategoryString(item) } }"
+        :to="{
+          path: '/tourism',
+          query: { data: `${filterData(item, 'ID')}-${getCategoryString(item)}` }
+        }"
         class="block absolute inset-0 z-10" />
       <button type="button"
         class="absolute top-3 right-3 p-3 bg-primary-op-20 rounded-2xl hover:bg-primary z-20"
@@ -14,8 +16,9 @@
         <img src="../../public/images/Vector-white.svg" alt="icon" />
       </button>
       <div class="h-41 flex items-center justify-center overflow-hidden rounded-t-2xl">
-        <img :src="item?.Picture?.PictureUrl1 || defaultImg" alt=""
-          class="card-top-img object-cover transtion-transform duration-300" />
+        <img class="card-top-img object-cover transtion-transform duration-300"
+          :src="item?.Picture?.PictureUrl1 ?? defaultImg"
+          :alt="item?.Picture?.PictureDescription1 ?? filterData(item, 'Name')" />
       </div>
       <div class="bg-white py-2 px-4 sm:p-3 rounded-b-2xl text-sm text-gray-800">
         <h4 class="text-lg text-dark font-bold mb-2.5">{{ filterData(item, 'Name') }}</h4>
@@ -24,7 +27,7 @@
           <p class="ml-2">{{ item.Address }}</p>
         </div>
         <div class="flex items-center mb-2"
-          v-if="item.OpenTime || item.StartTime">
+          v-if="item.OpenTime ?? item.StartTime">
           <img src="../../public/images/Time_Circle.svg" alt="icon" />
           <p class="ml-2">
             <template v-if="item.OpenTime">
@@ -51,11 +54,13 @@
 <script>
 import ShareLinkModal from '@/components/ShareLinkModal.vue';
 import shareLinkModalMixin from '@/mixins/shareLinkModalMixin';
+import formatTime from '@/utils/formatTime';
 
 export default {
   data() {
     return {
       tourismName: '',
+      defaultImg: 'https://raw.githubusercontent.com/calon719/2021_the_f2e_taiwan_travel/master/public/images/image_default.jpg',
     };
   },
   props: {
@@ -66,11 +71,10 @@ export default {
   },
   inject: [
     'filterData',
-    'formatTime',
-    'defaultImg',
   ],
   mixins: [shareLinkModalMixin],
   methods: {
+    formatTime,
     getCategoryString(tourismData) {
       const keys = Object.keys(tourismData);
       const filteredKey = keys.find((key) => key.includes('ID'));
@@ -82,7 +86,7 @@ export default {
     showShareLinkModal(tourism) {
       const category = this.getCategoryString(tourism);
       const id = this.filterData(tourism, 'ID');
-      this.shareUrl = `${process.env.VUE_APP_URL}/tourism?id=${id}&category=${category}`;
+      this.shareUrl = `${process.env.VUE_APP_URL}/tourism?data=${id}-${category}`;
       this.tourismName = this.filterData(tourism, 'Name');
       this.openShareLinkModal = true;
     },

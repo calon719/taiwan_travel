@@ -1,11 +1,14 @@
+// css start
+import 'sweetalert2/dist/sweetalert2.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import '@/assets/stylesheet/all.scss';
+// css end
 
 // plugin start
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 // plugin end
 
 import { createApp } from 'vue';

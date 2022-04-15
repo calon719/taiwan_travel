@@ -1,14 +1,17 @@
 <template>
   <div class="py-2 sm:py-4 px-4 sm:px-6 lg:px-0 text-lg overflow-auto grow">
-    <div class="bg-gray-300 pt-2.5 px-3 border border-gray-500 rounded-lg mb-3
+    <div class="bg-gray-300 pt-2.5 pb-1 px-3 border border-gray-500 rounded-lg mb-3
       flex justify-between">
       <div>
-        <span class="text-gray-600">選擇目的地</span>
-        <div class="flex flex-row-reverse justify-end align-center mb-1">
-          <button type="button" class="select-delBtn ml-1 hover:opacity-75">
+        <span class="text-gray-600"
+          v-show="!selectedCity.city">選擇目的地</span>
+        <div class="flex flex-row-reverse justify-end align-center"
+          v-show="selectedCity.city">
+          <button type="button" class="select-delBtn ml-1 hover:opacity-75"
+            @click="selectedCity = {}">
             <i class="bi bi-x-lg"></i>
           </button>
-          <span>1234</span>
+          <span>{{ selectedCity.city }}</span>
         </div>
       </div>
       <div>
@@ -34,124 +37,54 @@
         </li>
         <li>
           <button type="button"
-            class="px-2 border-b-2 border-transparent hover:border-primary"
+            class="px-2 border-b-2 hover:border-primary"
             :class="region === 'center' ? 'border-primary' : 'border-transparent'"
             @click="region = 'center'"
           >中部</button>
         </li>
         <li>
           <button type="button"
-            class="px-2 border-b-2 border-transparent hover:border-primary"
+            class="px-2 border-b-2 hover:border-primary"
             :class="region === 'south' ? 'border-primary' : 'border-transparent'"
             @click="region = 'south'"
           >南部</button>
         </li>
         <li>
           <button type="button"
-            class="px-2 border-b-2 border-transparent hover:border-primary"
+            class="px-2 border-b-2 hover:border-primary"
             :class="region === 'others' ? 'border-primary' : 'border-transparent'"
             @click="region = 'others'"
           >東部、離島</button>
         </li>
       </ul>
-      <CitiesSelector :region="region" />
+      <CitiesSelector :region="region" @emitCity="selectCity" />
     </section>
 
     <label for="search">
       <input id="search" type="text" placeholder="搜尋關鍵字"
         class="searchInput border border-gray-500 rounded-lg
-        px-3 pt-2 pb-2 mb-3 w-full bg-gray-300" />
+        px-3 pt-2 pb-2 mb-3 w-full bg-gray-300"
+        v-model.trim="searchQueries.keywords"/>
     </label>
 
     <section>
-      <h3 class="text-lg font-semibold mb-6">精選主題</h3>
+      <h3 class="text-lg font-semibold mb-3">精選主題（必填）</h3>
       <ul class="text-base grid grid-cols-2 gap-x-4 gap-y-3">
-        <li>
+        <li v-for="theme in tourismThemes"
+          :key="theme.themeName">
           <a href="#"
             class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
+            border hover:border-primary rounded-lg"
+            :class="searchQueries.theme === theme.themeName
+              ? 'border-primary'
+              : 'border-transparent'"
+            @click.prevent="toggleThemeSelect(theme.themeName)">
             <div
-              class="bg-primary h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-zeelandia text-icon text-white"></i>
+              class="h-17.5 w-17.5 flex justify-center items-center rounded-full"
+              :class="theme.color">
+              <i class="text-icon text-white" :class="theme.icon"></i>
             </div>
-            歷史文化
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-violet h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-youbike text-icon text-white"></i>
-            </div>
-            戶外踏青
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-rose h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-xingtian-tmp text-icon text-white"></i>
-            </div>
-            宗教巡禮
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-cyan h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-sky-lantern text-icon text-white"></i>
-            </div>
-            親子活動
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-blue h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-queens-head text-icon text-white"></i>
-            </div>
-            風景區
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-orange h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-tapioca text-icon text-white"></i>
-            </div>
-            美食品嚐
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-amber h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-grand-hotel text-icon text-white"></i>
-            </div>
-            住宿推薦
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex flex-col justify-center items-center py-2
-            border border-transparent hover:border-primary rounded-lg">
-            <div
-              class="bg-icon-green h-17.5 w-17.5 flex justify-center items-center rounded-full">
-              <i class="twicon-balloon text-icon text-white"></i>
-            </div>
-            觀光活動
+            {{ theme.themeName }}
           </a>
         </li>
       </ul>
@@ -161,13 +94,53 @@
 
 <script>
 import CitiesSelector from '@/components/CitiesSelector.vue';
+import tourismThemes from '@/data/tourismThemes';
 
 export default {
   data() {
     return {
       showSelectMenu: false,
       region: 'north',
+      searchQueries: {
+        city: '',
+        keywords: '',
+        theme: '',
+      },
+      selectedCity: {},
+      tourismThemes,
     };
+  },
+  watch: {
+    selectedCity() {
+      this.searchQueries.city = this.selectedCity.englishName ?? '';
+    },
+    searchQueries: {
+      handler() {
+        this.$emit('emit-search-queries', this.searchQueries);
+      },
+      deep: true,
+    },
+    $route() {
+      this.selectedCity = {};
+      this.showSelectMenu = false;
+      this.searchQueries = {
+        city: '',
+        keywords: '',
+        theme: '',
+      };
+    },
+  },
+  methods: {
+    selectCity(district) {
+      this.selectedCity = district;
+    },
+    toggleThemeSelect(theme) {
+      if (this.searchQueries.theme === theme) {
+        this.searchQueries.theme = '';
+      } else {
+        this.searchQueries.theme = theme;
+      }
+    },
   },
   components: {
     CitiesSelector,

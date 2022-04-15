@@ -13,6 +13,9 @@
 - jsSHA
 
 ## 開發心得
+### 嘗試使用 async await
+這次一個畫面要串接 2 個以上的 API，直接用 Promise 的 then 接會變的很長，所以嘗試使用之前沒用過的 async await 語法，在所有請求的回來後隱藏 Loading 動畫。
+
 ### 串接 TDX API
 API 可以代多樣的參數進去，但是資料的 id、name 前面都有加上 path 的文字，例如：HotelID、ActivityID 等等，要額外重新組字串。
 另外，有些沒有圖片要使用預設圖片避免破圖。

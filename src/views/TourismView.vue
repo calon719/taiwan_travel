@@ -6,7 +6,7 @@
         @click.prevent="$router.go(-1)">
         <i class="bi bi-chevron-left"></i>
       </button>
-      <h3 class="text-xl font-bold ml-2">{{ tourismData[`${$route.query.category}Name`] }}</h3>
+      <h3 class="text-xl font-bold ml-2">{{ tourismData[`${category}Name`] }}</h3>
     </div>
     <ul class="print-noPrint flex mr-6">
       <li>
@@ -28,8 +28,8 @@
 
   <div class="h-91 overflow-hidden mb-6 rounded-xl bg-white flex items-center justify-center">
     <img class="object-cover"
-      :src="tourismData.Picture?.PictureUrl1 || defaultImg"
-      :alt="tourismData[`${$route.query.category}Name`]" />
+      :src="tourismData.Picture?.PictureUrl1 ?? defaultImg"
+      :alt="tourismData.Picture?.PictureDescription1 ?? tourismData[`${category}Name`]" />
   </div>
 
   <section class="rounded-lg bg-primary-op-8 py-4 px-5 mb-6">
@@ -39,7 +39,7 @@
         <p class="ml-2">{{ tourismData.Address }}</p>
       </li>
       <li class="flex items-center"
-        v-show="tourismData.OpenTime || tourismData.StartTime">
+        v-show="tourismData.OpenTime ?? tourismData.StartTime">
         <img src="../../public/images/Time_Circle.svg" alt="icon" />
         <p class="ml-2">
           <template v-if="tourismData.OpenTime">
@@ -57,9 +57,9 @@
     </ul>
   </section>
 
-  <section class="mb-6" v-if="tourismData.DescriptionDetail || tourismData.Description">
+  <section class="mb-6" v-if="tourismData.DescriptionDetail ?? tourismData.Description">
     <h4 class="text-primary text-lg font-bold mb-4">景點介紹</h4>
-    <p>{{ tourismData.DescriptionDetail || tourismData.Description }}</p>
+    <p>{{ tourismData.DescriptionDetail ?? tourismData.Description }}</p>
   </section>
 
   <section class="mb-6" v-if="tourismData.TicketInfo">
@@ -75,7 +75,8 @@
   <section class="print-noBreak mb-12" v-if="tourismData.Position">
     <h4 class="text-primary text-lg font-bold mb-4">地圖資訊</h4>
     <div class="bg-white h-70 w-full mb-4 rounded-lg">
-      map
+      <MapComponent class="h-full"
+        :tourismData="tourismData" />
     </div>
   </section>
 
@@ -84,7 +85,7 @@
     <CardList :cardData="recommendableTourism" />
   </section>
   <ShareLinkModal :class="{ hidden: !openShareLinkModal }"
-    :tourismName="tourismData[`${$route.query.category}Name`]"
+    :tourismName="tourismData[`${category}Name`]"
     :shareUrl="shareUrl"
     @hideShareLinkModal="toggleShareLinkModal"/>
 </template>
@@ -92,35 +93,38 @@
 <script>
 import CardList from '@/components/CardList.vue';
 import ShareLinkModal from '@/components/ShareLinkModal.vue';
+import MapComponent from '@/components/MapComponent.vue';
 import shareLinkModalMixin from '@/mixins/shareLinkModalMixin';
+import formatTime from '@/utils/formatTime';
 
 export default {
   data() {
     return {
+      defaultImg: 'https://raw.githubusercontent.com/calon719/2021_the_f2e_taiwan_travel/master/public/images/image_default.jpg',
+      id: '',
+      category: '',
       tourismData: {},
       otherTourismData: [],
     };
   },
   emits: ['emit-loading-status'],
   inject: [
-    'headerOptions',
+    'getAuthorizationHeader',
     'filterData',
     'showErrMessage',
-    'formatTime',
-    'defaultImg',
   ],
   mixins: [shareLinkModalMixin],
   watch: {
     $route() {
-      if (this.$route.name === 'tourism') {
+      const { back, current } = window.history.state;
+      if (this.$route.name === 'tourism' && back !== current) {
         this.getData();
       }
     },
   },
   computed: {
     recommendableTourism() {
-      const { id } = this.$route.query;
-      const index = this.otherTourismData.findIndex((tourism) => this.filterData(tourism, 'ID') === id);
+      const index = this.otherTourismData.findIndex((tourism) => this.filterData(tourism, 'ID') === this.id);
       const tourismData = this.otherTourismData.filter((item, i) => i !== index);
 
       const len = tourismData.length;
@@ -142,16 +146,22 @@ export default {
     },
   },
   methods: {
+    formatTime,
+    getQuery() {
+      const { data } = this.$route.query;
+      const dataStrArr = data.split('-');
+      [this.id, this.category] = dataStrArr;
+    },
     async getData() {
-      const { id, category } = this.$route.query;
-      const api = `${process.env.VUE_APP_APIBASE}/${category}`;
-      const idKey = `${category}ID`;
+      this.getQuery();
+      const api = `${process.env.VUE_APP_APIBASE}/${this.category}`;
+      const idKey = `${this.category}ID`;
 
       this.$emit('emit-loading-status', true);
       try {
         const tourismRes = await this.$http.get(
-          `${api}?$filter=contains(${idKey},'${id}')`,
-          { headers: this.headerOptions },
+          `${api}?$filter=contains(${idKey},'${this.id}')&$format=JSON`,
+          { headers: this.getAuthorizationHeader() },
         );
         this.tourismData = { ...tourismRes.data[0] };
 
@@ -160,7 +170,7 @@ export default {
         const city = cityNameArr.join('');
 
         const otherTourismRes = await this.$http.get(
-          `${api}?$filter=${idKey} ne '${id}' and startswith(Address, '${city}')`,
+          `${api}?$filter=${idKey} ne '${this.id}' and startswith(Address, '${city}')&$format=JSON`,
           { headers: this.headerOptions },
         );
         this.otherTourismData = [...otherTourismRes.data];
@@ -173,13 +183,13 @@ export default {
       this.$router.go(-1);
     },
     printPage() {
-      console.log('print');
       window.print();
     },
   },
   components: {
     CardList,
     ShareLinkModal,
+    MapComponent,
   },
   created() {
     this.getData();

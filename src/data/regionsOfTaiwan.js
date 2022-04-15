@@ -18,7 +18,7 @@ const regions = {
     },
     {
       city: '桃園',
-      englishName: 'Taoyaun',
+      englishName: 'Taoyuan',
     },
     {
       city: '竹市',

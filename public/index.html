@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="description" content="<%- htmlWebpackPlugin.options.meta.description %>"/>
+    <meta name="keywords" content="<%- htmlWebpackPlugin.options.meta.keywords %>"/>
+    <meta name="robots" content="<%- htmlWebpackPlugin.options.meta.robots %>"/>
+    <meta name="HandheldFriendly" content="<%- htmlWebpackPlugin.options.meta.HandheldFriendly %>">
+    <meta name="MobileOptimized" content="<%- htmlWebpackPlugin.options.meta.MobileOptimized %>">
+    <meta property="og:type" content="<%- htmlWebpackPlugin.options.meta.og.type %>" />
+    <meta property="og:url" content="<%- htmlWebpackPlugin.options.meta.og.url %>" />
+    <meta property="og:title" content="<%- htmlWebpackPlugin.options.meta.og.title %>" />
+    <meta property="og:image" content="<%- htmlWebpackPlugin.options.meta.og.image %>" />
+    <meta property="og:description" content="<%- htmlWebpackPlugin.options.meta.og.description %>" />
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>favicon.png">
-  <title>TAIWAN TRAVEL</title>
 
-  <link rel="stylesheet" href="fonts/twicons/twicon.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,300&display=swap"
-    rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="fonts/twicons/twicon.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,300&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+    <link rel="icon" href="<%= htmlWebpackPlugin.options.icon %>">
 
-<body>
-  <noscript>
-    <strong>We're sorry but TAIWAN TRAVEL doesn't work properly without JavaScript enabled. Please enable it to
-      continue.</strong>
-    <strong>在沒有 JavaScript 的情況下 TAIWAN TRAVEL 有可能無法正常運作，麻煩確認您的瀏覽器是否有支援 JavaScript。</strong>
-  </noscript>
-  <div id="app"></div>
-</body>
+    <title>TAIWAN TRAVEL</title>
+  </head>
 
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to
+        continue.</strong>
+      <br>
+      <strong>在沒有 JavaScript 的情況下 <%= htmlWebpackPlugin.options.title %> 有可能無法正常運作，麻煩確認您的瀏覽器是否有支援 JavaScript。</strong>
+    </noscript>
+    <div id="app"></div>
+  </body>
 </html>

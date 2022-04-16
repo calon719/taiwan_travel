@@ -110,9 +110,7 @@ export default {
   },
   watch: {
     $route() {
-      const { back, current } = window.history.state;
-
-      if (this.$route.name === 'search' && back !== current) {
+      if (this.$route.name === 'search') {
         this.getData();
         this.getCityName();
       }

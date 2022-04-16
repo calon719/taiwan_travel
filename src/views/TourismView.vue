@@ -195,7 +195,11 @@ export default {
     this.getData();
   },
   mounted() {
-    this.shareUrl = window.location.href;
+    const url = window.location.href.replace(
+      'https://calon719.github.io/taiwan_travel/#/',
+      'https://calon719.github.io/taiwan_travel/',
+    );
+    this.shareUrl = url;
   },
 };
 </script>

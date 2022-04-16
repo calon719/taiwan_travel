@@ -22,7 +22,7 @@ module.exports = defineConfig({
           og: {
             type: 'website',
             url: 'https://calon719.github.io/taiwan_travel/',
-            title: '拉麵屋',
+            title: 'Taiwan Travel',
             image: 'images/logo_2.png',
             description: '臺灣旅遊景點介紹',
           },

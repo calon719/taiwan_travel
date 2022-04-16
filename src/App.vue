@@ -119,7 +119,7 @@ export default {
     goSearchPage() {
       this.$router.push({
         path: '/search',
-        query: this.searchQueries,
+        query: { ...this.searchQueries },
       });
     },
     getSearchQueries(searchQueries) {

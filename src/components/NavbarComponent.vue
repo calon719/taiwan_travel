@@ -68,7 +68,10 @@
     </label>
 
     <section>
-      <h3 class="text-lg font-semibold mb-3">精選主題（必填）</h3>
+      <h3 class="text-lg font-semibold mb-3">
+        精選主題
+        <span class="text-sm font-normal text-danger">（必選）</span>
+      </h3>
       <ul class="text-base grid grid-cols-2 gap-x-4 gap-y-3">
         <li v-for="theme in tourismThemes"
           :key="theme.themeName">

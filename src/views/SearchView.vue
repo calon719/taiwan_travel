@@ -64,12 +64,13 @@
     </ul>
   </div>
 
-  <CardList v-if="tourismData.length" :cardData="tourismData" />
+  <CardList v-if="tourismData.length" :cardData="curPageData" />
   <p v-else>沒有符合的搜尋結果，請試著換關鍵字在搜尋一次。</p>
 
-  <div class="flex justify-center">
-    <PaginationComponent v-if="tourismData.length" />
-  </div>
+  <PaginationComponent
+    v-show="paginationData.totalPages > 1"
+    :paginationData="paginationData"
+    @changePage="getPageData"/>
 </template>
 
 <script>
@@ -85,52 +86,85 @@ export default {
       tourismThemes,
       regionsOfTaiwan,
       cityName: '',
+      paginationData: {
+        totalPages: 1,
+        curPage: 1,
+        hasPrePage: false,
+        hasNextPage: false,
+      },
     };
-  },
-  emits: ['emit-loading-status'],
-  watch: {
-    $route() {
-      const { back, current } = window.history.state;
-      if (this.$route.name === 'search' && back !== current) {
-        this.getData();
-        this.getCityName();
-      }
-    },
   },
   inject: [
     'getAuthorizationHeader',
     'showErrMessage',
   ],
+  emits: ['emit-loading-status'],
+  computed: {
+    curPageData() {
+      const page = this.paginationData.curPage;
+      const startIndex = (page - 1) * 9;
+      const endIndex = page * 9;
+      const result = this.tourismData.filter((tourism, i) => i >= startIndex && i < endIndex);
+      return result;
+    },
+  },
+  watch: {
+    $route() {
+      const { back, current } = window.history.state;
+
+      if (this.$route.name === 'search' && back !== current) {
+        this.getData();
+        this.getCityName();
+      }
+    },
+    tourismData: {
+      handler() {
+        this.paginationData.totalPages = Math.ceil(this.tourismData.length / 9);
+        this.getPageData();
+      },
+      deep: true,
+    },
+  },
   methods: {
     getCityName() {
       let city = '';
       if (this.$route.query.city !== '') {
-        let arr = Object.values(this.regionsOfTaiwan);
-        arr = arr.flat(1);
-        const index = arr
+        let citiesArr = Object.values(this.regionsOfTaiwan);
+        citiesArr = citiesArr.flat(1);
+        const index = citiesArr
           .findIndex((district) => this.$route.query.city === district.englishName);
-        city = arr[index]?.city;
+        city = citiesArr[index]?.city;
       }
       this.cityName = city;
     },
     getData() {
       let api = '';
 
-      const searchQueriesCheck = this.$route.query.theme
-        ?? this.$route.query.keywords
-        ?? this.$route.query.city;
-
       if (this.$route.query.category) {
         const { category } = this.$route.query;
         const city = this.$route.query.city ?? '';
         api = `${process.env.VUE_APP_APIBASE}/${category}/${city}`;
-      } else if (searchQueriesCheck) {
-        const index = this.tourismThemes
-          .findIndex((theme) => theme.themeName === this.$route.query.theme);
-        const { category, query } = this.tourismThemes[index];
+      } else if (this.$route.query.theme) {
+        const {
+          theme,
+          city,
+          keywords,
+        } = this.$route.query;
 
-        const filterQuery = query === '' ? query : `?$filter=${query}`;
-        api = `${process.env.VUE_APP_APIBASE}/${category + filterQuery}`;
+        const index = this.tourismThemes
+          .findIndex((item) => item.themeName === theme);
+        const { query, baseApi, category } = this.tourismThemes[index];
+
+        const cityName = city === '' ? '' : `/${city}`;
+
+        let filterQuery = '';
+        if (query !== '' && keywords !== '') {
+          filterQuery = `?$filter=${query} and contains(${category}Name, '${keywords}')`;
+        } else if (query !== '' || keywords !== '') {
+          const keywordsQuery = keywords === '' ? '' : `contains(${category}Name, '${keywords}')`;
+          filterQuery = `?$filter=${query + keywordsQuery}`;
+        }
+        api = baseApi + cityName + filterQuery;
       }
 
       if (api === '') {
@@ -141,14 +175,19 @@ export default {
         this.$emit('emit-loading-status', true);
         this.$http.get(api, { headers: this.getAuthorizationHeader() })
           .then((res) => {
-            /* this.tourismData = res.data; */
-            console.log(res);
+            this.tourismData = res.data;
             this.$emit('emit-loading-status', false);
           }).catch(() => {
             this.$emit('emit-loading-status', false);
             this.showErrMessage();
           });
       }
+    },
+    getPageData(page = 1) {
+      window.scrollTo(0, 0);
+      this.paginationData.curPage = page;
+      this.paginationData.hasPrePage = page > 1;
+      this.paginationData.hasNextPage = page < this.paginationData.totalPages;
     },
   },
   components: {

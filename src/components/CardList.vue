@@ -15,32 +15,34 @@
         @click="showShareLinkModal(item)">
         <img src="../../public/images/Vector-white.svg" alt="icon" />
       </button>
-      <div class="h-41 flex items-center justify-center overflow-hidden rounded-t-2xl">
-        <img class="card-top-img object-cover transtion-transform duration-300"
-          :src="item?.Picture?.PictureUrl1 ?? defaultImg"
-          :alt="item?.Picture?.PictureDescription1 ?? filterData(item, 'Name')" />
-      </div>
-      <div class="bg-white py-2 px-4 sm:p-3 rounded-b-2xl text-sm text-gray-800">
-        <h4 class="text-lg text-dark font-bold mb-2.5">{{ filterData(item, 'Name') }}</h4>
-        <div class="flex items-center mb-2">
-          <img src="../../public/images/Location.svg" alt="icon" />
-          <p class="ml-2">{{ item.Address }}</p>
+      <div class="flex flex-col h-full">
+        <div class="h-41 flex items-center justify-center overflow-hidden rounded-t-2xl">
+          <img class="card-top-img object-cover transtion-transform duration-300"
+            :src="item?.Picture?.PictureUrl1 ?? defaultImg"
+            :alt="item?.Picture?.PictureDescription1 ?? filterData(item, 'Name')" />
         </div>
-        <div class="flex items-center mb-2"
-          v-if="item.OpenTime ?? item.StartTime">
-          <img src="../../public/images/Time_Circle.svg" alt="icon" />
-          <p class="ml-2">
-            <template v-if="item.OpenTime">
-              {{ item.OpenTime }}
-            </template>
-            <template v-else>
-              {{ formatTime(item.StartTime) }} 至 {{ formatTime(item.EndTime) }}
-            </template>
-          </p>
-        </div>
-        <div class="flex items-center mb-2">
-          <img src="../../public/images/Calling.svg" alt="icon" />
-          <p class="ml-2">{{ item.Phone }}</p>
+        <div class="bg-white py-2 px-4 sm:p-3 rounded-b-2xl text-sm text-gray-800 grow">
+          <h4 class="text-lg text-dark font-bold mb-2.5">{{ filterData(item, 'Name') }}</h4>
+          <div class="flex items-center mb-2">
+            <img src="../../public/images/Location.svg" alt="icon" />
+            <p class="ml-2">{{ item.Address }}</p>
+          </div>
+          <div class="flex items-center mb-2"
+            v-if="item.OpenTime ?? item.StartTime">
+            <img src="../../public/images/Time_Circle.svg" alt="icon" />
+            <p class="ml-2">
+              <template v-if="item.OpenTime">
+                {{ item.OpenTime }}
+              </template>
+              <template v-else>
+                {{ formatTime(item.StartTime) }} 至 {{ formatTime(item.EndTime) }}
+              </template>
+            </p>
+          </div>
+          <div class="flex items-center mb-2" v-if="item.Phone">
+            <img src="../../public/images/Calling.svg" alt="icon" />
+            <p class="ml-2">{{ item.Phone }}</p>
+          </div>
         </div>
       </div>
     </li>

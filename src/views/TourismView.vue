@@ -116,8 +116,7 @@ export default {
   mixins: [shareLinkModalMixin],
   watch: {
     $route() {
-      const { back, current } = window.history.state;
-      if (this.$route.name === 'tourism' && back !== current) {
+      if (this.$route.name === 'tourism') {
         this.getData();
       }
     },

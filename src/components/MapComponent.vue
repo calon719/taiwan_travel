@@ -14,7 +14,7 @@ export default {
     },
   },
   watch: {
-    toursimData() {
+    tourismData() {
       this.drawMap();
     },
   },
